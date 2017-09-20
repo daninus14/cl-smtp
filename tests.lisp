@@ -59,7 +59,15 @@ n !"
                  (rfc2045-q-encode-string-to-stream 
                   str s :external-format :latin-1 :columns 64))))
     (assert qstr)
-    (assert (string-equal qstr (format nil "check of masked dots.~C~C..~C~C.end" #\Return #\Newline #\Return #\Newline)))))
+    (assert (string-equal qstr (format nil "check of masked dots.~C~C..~C~C..end" #\Return #\Newline #\Return #\Newline)))))
+
+(define-cl-smtp-test "rfc2045-q-encode-string-to-stream-6" ()
+  (let* ((str (format nil "check of masked dot at last column 12345678901234567890123456789.~A~ALAST LINE" #\Newline #\Newline))
+         (qstr (with-output-to-string (s)
+                 (rfc2045-q-encode-string-to-stream
+                  str s :external-format :latin-1 :columns 64))))
+    (assert qstr)
+    (assert (string-equal qstr (format nil "check of masked dot at last column 12345678901234567890123456789=~C~C..~C~C~C~CLAST LINE" #\Return #\Newline #\Return #\Newline #\Return #\Newline)))))
 
 (define-cl-smtp-test "string-has-non-ascii-1" ()
   (assert (string-has-non-ascii "test Ü ende")))

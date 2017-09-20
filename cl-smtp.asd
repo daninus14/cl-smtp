@@ -21,7 +21,7 @@
   :licence "LLGPL"
   :author "Jan Idzikowski <jidzikowski@common-lisp.net>"
   :maintainer "Jan Idzikowski <jidzikowski@common-lisp.net>"
-  :version "20151023.2"
+  :version "20170920.1"
   :perform (load-op :after (op webpage)
                     (pushnew :cl-smtp cl:*features*))
   :depends-on (:usocket 

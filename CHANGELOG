@@ -1,3 +1,10 @@
+Version 20170920.1
+2017.09.20
+Fix error in rfc2045-q-encode-string-to-stream
+correct dot masking (rfc5321 4.5.2), add new test rfc2045-q-encode-string-to-stream-6
+Thanks Jocelyn Fréchot for the bug report
+Change cl-smtp.asd, cl-smtp.lisp, tests.lisp CHANGELOG
+
 Version 20151023.2
 2015.10.23
 Fix error with newlines in header strings.
