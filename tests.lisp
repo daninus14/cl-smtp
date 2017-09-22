@@ -69,6 +69,22 @@ n !"
     (assert qstr)
     (assert (string-equal qstr (format nil "check of masked dot at last column 12345678901234567890123456789=~C~C..~C~C~C~CLAST LINE" #\Return #\Newline #\Return #\Newline #\Return #\Newline)))))
 
+(define-cl-smtp-test "rfc2045-q-encode-string-to-stream-7" ()
+  (let* ((str (format nil "Example using non-ASCII characters:~A   -  74% : Erreur de protocole : la passerelle ne répond pas à la requête.~AYou won’t receive this!" #\Newline #\Newline))
+         (qstr (with-output-to-string (s)
+                 (rfc2045-q-encode-string-to-stream
+                  str s :external-format :utf-8 :columns 74))))
+    (assert qstr)
+    (assert (string-equal qstr (format nil "Example using non-ASCII characters:~C~C   -  74% : Erreur de protocole : la passerelle ne r=C3=A9pond pas =C3=A0 la requ=C3=AAte=~C~C..~C~CYou won=E2=80=99t receive this!" #\Return #\Newline #\Return #\Newline #\Return #\Newline)))))
+
+(define-cl-smtp-test "rfc2045-q-encode-string-to-stream-8" ()
+  (let* ((str "12345678901234567890123456789012345678901234567890123456789012345678901234.")
+         (qstr (with-output-to-string (s)
+                 (rfc2045-q-encode-string-to-stream
+                  str s :external-format :utf-8 :columns 74))))
+    (assert qstr)
+    (assert (string-equal qstr (format nil"12345678901234567890123456789012345678901234567890123456789012345678901234=~C~C.." #\Return #\Newline)))))
+
 (define-cl-smtp-test "string-has-non-ascii-1" ()
   (assert (string-has-non-ascii "test Ü ende")))
 

@@ -1,3 +1,9 @@
+Version 20170922.1
+2017.09.22
+Further error in rfc2045-q-encode-string-to-stream fixed
+add 2 new tests for correct dot masking
+Change cl-smtp.asd, cl-smtp.lisp, tests.lisp CHANGELOG
+
 Version 20170920.1
 2017.09.20
 Fix error in rfc2045-q-encode-string-to-stream
