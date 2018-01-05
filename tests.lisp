@@ -85,6 +85,17 @@ n !"
     (assert qstr)
     (assert (string-equal qstr (format nil"12345678901234567890123456789012345678901234567890123456789012345678901234=~C~C.." #\Return #\Newline)))))
 
+(define-cl-smtp-test "rfc2045-q-encode-string-to-stream-9" ()
+  (let* ((str
+          "123456789012345678901234567890123456789012345678901234567890123456789012345.")
+         (qstr (with-output-to-string (s)
+                 (rfc2045-q-encode-string-to-stream
+                  str s :external-format :utf-8 :columns 74))))
+    (assert qstr)
+    (assert (string-equal qstr (format
+                                nil"12345678901234567890123456789012345678901234567890123456789012345678901234=~C~C5."
+                                #\Return #\Newline)))))
+
 (define-cl-smtp-test "string-has-non-ascii-1" ()
   (assert (string-has-non-ascii "test Ü ende")))
 

@@ -120,8 +120,7 @@
            (write-blank-line stream)
            (setf last-line-break n))
          (cond
-           ((and (char= c #\.) (or (= n 0) (= n last-line-break)
-                                   (= last-line-break columns)))
+           ((and (char= c #\.) (= n last-line-break))
             (write-char #\. stream)
             (write-char #\. stream))
            ((char= c #\NewLine)
