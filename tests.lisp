@@ -96,18 +96,34 @@ n !"
                                 nil"12345678901234567890123456789012345678901234567890123456789012345678901234=~C~C5."
                                 #\Return #\Newline)))))
 
+(define-cl-smtp-test "rfc2045-q-encode-string-to-stream-10" ()
+  (let* ((str "لینک تایید | Verification link")
+         (qstr (with-output-to-string (s)
+                 (rfc2045-q-encode-string-to-stream
+                  str s :external-format :utf-8 :columns 74))))
+    (assert qstr)
+    (assert (string-equal qstr "=D9=84=DB=8C=D9=86=DA=A9 =D8=AA=D8=A7=DB=8C=DB=8C=D8=AF | Verification link"))))
+
 (define-cl-smtp-test "string-has-non-ascii-1" ()
   (assert (string-has-non-ascii "test Ü ende")))
 
 (define-cl-smtp-test "string-has-non-ascii-2" ()
   (assert (not (string-has-non-ascii "test ende"))))
 
-(define-cl-smtp-test "rfc2045-q-encode-string-utf-8" ()
+(define-cl-smtp-test "rfc2045-q-encode-string-utf-8-1" ()
   (let* ((str "öüäÖÜÄß")
          (qstr (rfc2045-q-encode-string str :external-format :utf-8)))
     (assert qstr)
     (assert (string-equal 
              qstr "=?UTF-8?Q?=C3=B6=C3=BC=C3=A4=C3=96=C3=9C=C3=84=C3=9F?="))))
+
+(define-cl-smtp-test "rfc2045-q-encode-string-utf-8-2" ()
+  (let* ((str "لینک تایید | Verification link")
+         (qstr (rfc2045-q-encode-string str :external-format :utf-8)))
+    (assert qstr)
+    (assert (string-equal
+             qstr "=?UTF-8?Q?=D9=84=DB=8C=D9=86=DA=A9=20=D8=AA=D8=A7=DB=8C=DB=8C=D8=AF=20=7C=20=56=65=72=69=66=69=63=61=74=69=6F=6E=20=6C=69=6E=6B?="))))
+
 
 (define-cl-smtp-test "rfc2045-q-encode-string-newline-1" ()
   (assert (equal (rfc2045-q-encode-string

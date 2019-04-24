@@ -1,3 +1,11 @@
+Version 20190424.1
+2019.04.24
+Fix error rfc2045-q-encode-string, when string contains non ascii character,
+  encode whole string
+add new tests
+Thanks Saman H. Pasha for the bug report and test
+Change cl-smtp.asd, cl-smtp.lisp. tests.lisp CHANGELOG
+
 Version 20180105.1
 2018.01.05
 Fix error dot masking in rfc2045-q-encode-string-to-stream
