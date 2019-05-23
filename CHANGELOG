@@ -1,3 +1,10 @@
+Version 20190523.1
+2019.05.23
+Fix error rfc2045-q-encode-string, when string contains non ascii character,
+  and has more than 74 charactesr, set correct encoding string after newline
+add new test
+Change cl-smtp.asd, cl-smtp.lisp. tests.lisp CHANGELOG
+
 Version 20190424.1
 2019.04.24
 Fix error rfc2045-q-encode-string, when string contains non ascii character,

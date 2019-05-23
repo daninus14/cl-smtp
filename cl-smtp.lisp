@@ -69,37 +69,42 @@
 
 (defun rfc2045-q-encode-string (str &key (external-format :utf-8))
   (let ((line-has-non-ascii (string-has-non-ascii str))
+        (estart (concatenate 'string "=?"
+                             (string-upcase (symbol-name external-format))
+                             "?Q?"))
         (last-line-break 0)
         (len (length str))
         (exformat (flex:make-external-format external-format)))
     (with-output-to-string (s)
       (when line-has-non-ascii
-        (format s "=?~A?Q?"
-                (string-upcase (symbol-name external-format)))
-        (setf line-has-non-ascii t))
+        (write-sequence estart s))
       (loop for c across str
          for n from 0 to len
          for column = (- n last-line-break)
          do
            (when (>= column 74)
+             (when line-has-non-ascii
+               (write-sequence "?=" s))
              (write-blank-line s)
              (write-char #\Space s)
+             (when line-has-non-ascii
+               (write-sequence estart s))
              (setf last-line-break n))
            (cond
-             ((char= c #\NewLine)
-              (setf last-line-break n)
-              (write-blank-line s)
-              (write-char #\Space s))
              (line-has-non-ascii
               (loop for byte across (flex:string-to-octets 
                                      (make-string 1 :initial-element c)
                                      :external-format exformat)
                  do (format s "~:@(=~2,'0X~)" byte)))
-             (t 
+             ((char= c #\NewLine)
+              (setf last-line-break n)
+              (write-blank-line s)
+              (write-char #\Space s))
+             (t
               (unless (char= c #\Return)
                 (write-char c s)))))
       (when line-has-non-ascii
-        (format s "?=")))))
+        (write-sequence "?=" s)))))
 
 (defun rfc2045-q-encode-string-to-stream (str stream 
                                           &key (external-format :utf-8) 

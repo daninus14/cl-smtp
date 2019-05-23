@@ -124,6 +124,14 @@ n !"
     (assert (string-equal
              qstr "=?UTF-8?Q?=D9=84=DB=8C=D9=86=DA=A9=20=D8=AA=D8=A7=DB=8C=DB=8C=D8=AF=20=7C=20=56=65=72=69=66=69=63=61=74=69=6F=6E=20=6C=69=6E=6B?="))))
 
+(define-cl-smtp-test "rfc2045-q-encode-string-utf-8-3" ()
+  (let* ((str "Test: check correct newline in quoted encoding string for string longer then 74 charecters with spezial german 'ü' 'Ü' 'ä' 'Ä' 'ö' 'Ö' 'ß' characters")
+         (qstr (rfc2045-q-encode-string str :external-format :utf-8)))
+    (assert qstr)
+    (assert (equal
+             qstr "=?UTF-8?Q?=54=65=73=74=3A=20=63=68=65=63=6B=20=63=6F=72=72=65=63=74=20=6E=65=77=6C=69=6E=65=20=69=6E=20=71=75=6F=74=65=64=20=65=6E=63=6F=64=69=6E=67=20=73=74=72=69=6E=67=20=66=6F=72=20=73=74=72=69=6E=67=20=6C=6F=6E=67=65=72=20=74=68?=
+ =?UTF-8?Q?=65=6E=20=37=34=20=63=68=61=72=65=63=74=65=72=73=20=77=69=74=68=20=73=70=65=7A=69=61=6C=20=67=65=72=6D=61=6E=20=27=C3=BC=27=20=27=C3=9C=27=20=27=C3=A4=27=20=27=C3=84=27=20=27=C3=B6=27=20=27=C3=96=27=20=27=C3=9F=27=20=63=68=61=72=61=63=74=65=72?=
+ =?UTF-8?Q?=73?="))))
 
 (define-cl-smtp-test "rfc2045-q-encode-string-newline-1" ()
   (assert (equal (rfc2045-q-encode-string
