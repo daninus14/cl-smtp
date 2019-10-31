@@ -82,13 +82,12 @@
          for n from 0 to len
          for column = (- n last-line-break)
          do
-           (when (>= column 74)
-             (when line-has-non-ascii
-               (write-sequence "?=" s))
+           (when (and (>= column 74)
+                      line-has-non-ascii)
+             (write-sequence "?=" s)
              (write-blank-line s)
              (write-char #\Space s)
-             (when line-has-non-ascii
-               (write-sequence estart s))
+             (write-sequence estart s)
              (setf last-line-break n))
            (cond
              (line-has-non-ascii
@@ -96,7 +95,9 @@
                                      (make-string 1 :initial-element c)
                                      :external-format exformat)
                  do (format s "~:@(=~2,'0X~)" byte)))
-             ((char= c #\NewLine)
+             ((or (char= c #\NewLine)
+                  (and (char= c #\Space)
+                       (>= column 74)))
               (setf last-line-break n)
               (write-blank-line s)
               (write-char #\Space s))

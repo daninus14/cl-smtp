@@ -136,7 +136,7 @@ n !"
 (define-cl-smtp-test "rfc2045-q-encode-string-newline-1" ()
   (assert (equal (rfc2045-q-encode-string
                   "123456789A123456789A123456789A123456789A123456789A123456789A123456789A123456789A123456789A123456789A123456789A123456789A123456789A123456789A123456789A123456789A")
-                 (format nil"123456789A123456789A123456789A123456789A123456789A123456789A123456789A1234~C~C 56789A123456789A123456789A123456789A123456789A123456789A123456789A12345678~C~C 9A123456789A" #\Return #\Newline #\Return #\Newline))))
+                 "123456789A123456789A123456789A123456789A123456789A123456789A123456789A123456789A123456789A123456789A123456789A123456789A123456789A123456789A123456789A123456789A")))
 
 (define-cl-smtp-test "rfc2045-q-encode-string-newline-2" ()
   (assert (equal (rfc2045-q-encode-string
@@ -151,6 +151,12 @@ n !"
                           #\Return #\Newline #\Return #\Newline))
                  (format nil "123456789A123456789A~C~C .~C~C END"
                           #\Return #\Newline #\Return #\Newline))))
+
+(define-cl-smtp-test "rfc2045-q-encode-string-newline-4" ()
+  (assert (equal (rfc2045-q-encode-string
+                  "123456789A 123456789A 123456789A 123456789A 123456789A 123456789A 123456789A END")
+                 (format nil "123456789A 123456789A 123456789A 123456789A 123456789A 123456789A 123456789A~C~C END"
+                         #\Return #\Newline))))
 
 (define-cl-smtp-test "escape-rfc822-quoted-string" ()
   (assert (equal (escape-rfc822-quoted-string "test end") "test end"))
