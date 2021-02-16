@@ -339,9 +339,7 @@ header is generated at all.")
     ;; Unless we want ESMTP features, perform classic SMTP handshake and return
     ;; Read the initial greeting from the SMTP server
     (smtp-command stream nil 220)
-    (smtp-command stream (format nil "HELO ~A" 
-                                 (usocket::get-host-name))
-                  250)
+    (smtp-command stream (format nil "HELO ~A" local-hostname) 250)
     (return-from smtp-handshake stream))
 
   ;; When SSL or authentication requested, perform ESMTP EHLO
