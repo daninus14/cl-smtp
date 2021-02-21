@@ -19,7 +19,7 @@
 (in-package :cl-user)
 
 (defpackage :cl-smtp
-  (:use :cl :asdf :flexi-streams :trivial-gray-streams)
+  (:use :cl :flexi-streams :trivial-gray-streams)
   (:export "SEND-EMAIL"
            "WITH-SMTP-MAIL"
            "SMTP-ERROR"
