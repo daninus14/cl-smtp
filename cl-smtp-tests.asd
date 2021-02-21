@@ -16,22 +16,12 @@
 ;;; File: cl-smtp.asd
 ;;; Description: cl-smtp ASDF system definition file
 
-(asdf:defsystem :cl-smtp
-  :description "Common Lisp smtp client."
+(asdf:defsystem :cl-smtp-tests
+  :description "Tests for Common Lisp smtp client."
   :licence "LLGPL"
   :author "Jan Idzikowski <jidzikowski@common-lisp.net>"
   :maintainer "Jan Idzikowski <jidzikowski@common-lisp.net>"
-  :version "20191031.1"
-  :perform (load-op :after (op webpage)
-                    (pushnew :cl-smtp cl:*features*))
-  :depends-on (:usocket 
-               :trivial-gray-streams
-               :flexi-streams
-               #-allegro :cl-base64 
-               #-allegro :cl+ssl)
+  :version "20200724.1"
+  :depends-on (:cl-smtp)
   :serial t
-  :components ((:file "package")
-               (:file "attachments")
-               (:file "cl-smtp")
-               (:file "mime-types")))
-
+  :components ((:file "tests")))

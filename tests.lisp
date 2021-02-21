@@ -1,5 +1,7 @@
 ;; -*- mode: common-lisp; coding: utf-8 -*-
-(in-package :cl-smtp)
+(defpackage :cl-smtp-tests (:use :cl-smtp))
+
+(in-package :cl-smtp-tests)
 
 (defparameter *cl-smtp-tests* (make-hash-table :test 'equal))
 
