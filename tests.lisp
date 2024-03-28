@@ -1,5 +1,5 @@
 ;; -*- mode: common-lisp; coding: utf-8 -*-
-(defpackage :cl-smtp-tests (:use :cl-smtp))
+(defpackage :cl-smtp-tests (:use :cl :cl-smtp))
 
 (in-package :cl-smtp-tests)
 
@@ -21,7 +21,7 @@
 (define-cl-smtp-test "rfc2045-q-encode-string-to-stream-1" ()
   (let* ((str "öüäÖÜÄß")
          (qstr (with-output-to-string (s)
-                 (rfc2045-q-encode-string-to-stream 
+                 (cl-smtp::rfc2045-q-encode-string-to-stream
                   str s :external-format :utf-8))))
     (assert qstr)
     (assert (string-equal qstr "=C3=B6=C3=BC=C3=A4=C3=96=C3=9C=C3=84=C3=9F"))))
@@ -29,7 +29,7 @@
 (define-cl-smtp-test "rfc2045-q-encode-string-to-stream-2" ()
   (let* ((str "öüäÖÜÄß")
          (qstr (with-output-to-string (s)
-                 (rfc2045-q-encode-string-to-stream 
+                 (cl-smtp::rfc2045-q-encode-string-to-stream
                   str s :external-format :latin-1))))
     (assert qstr)
     (assert (string-equal qstr "=F6=FC=E4=D6=DC=C4=DF"))))
@@ -37,7 +37,7 @@
 (define-cl-smtp-test "rfc2045-q-encode-string-to-stream-3" ()
   (let* ((str "check if #\= encoded")
          (qstr (with-output-to-string (s)
-                 (rfc2045-q-encode-string-to-stream 
+                 (cl-smtp::rfc2045-q-encode-string-to-stream
                   str s :external-format :latin-1))))
     (assert qstr)
     (assert (string-equal qstr "check if #\=3D encoded"))))
@@ -45,7 +45,7 @@
 (define-cl-smtp-test "rfc2045-q-encode-string-to-stream-4" ()
   (let* ((str "Müde vom Durchwandern öder Letternwüsten, voll leerer Hirngeburten, in anmaaßendsten Wortnebeln ; überdrüssig ästhetischer Süßler wie grammatischer Wässerer ; entschloß ich mich : Alles, was je schrieb, in Liebe und Haß, als immerfort mitlebend zu behandeln !")
          (qstr (with-output-to-string (s)
-                 (rfc2045-q-encode-string-to-stream 
+                 (cl-smtp::rfc2045-q-encode-string-to-stream
                   str s :external-format :latin-1 :columns 64))))
     (assert qstr)
     (assert (string-equal qstr "M=FCde vom Durchwandern =F6der Letternw=FCsten, voll leerer Hirngeburt=
@@ -58,7 +58,7 @@ n !"
 (define-cl-smtp-test "rfc2045-q-encode-string-to-stream-5" ()
   (let* ((str (format nil "check of masked dots.~C.~C.end" #\Newline #\Newline))
          (qstr (with-output-to-string (s)
-                 (rfc2045-q-encode-string-to-stream 
+                 (cl-smtp::rfc2045-q-encode-string-to-stream
                   str s :external-format :latin-1 :columns 64))))
     (assert qstr)
     (assert (string-equal qstr (format nil "check of masked dots.~C~C..~C~C..end" #\Return #\Newline #\Return #\Newline)))))
@@ -66,7 +66,7 @@ n !"
 (define-cl-smtp-test "rfc2045-q-encode-string-to-stream-6" ()
   (let* ((str (format nil "check of masked dot at last column 12345678901234567890123456789.~A~ALAST LINE" #\Newline #\Newline))
          (qstr (with-output-to-string (s)
-                 (rfc2045-q-encode-string-to-stream
+                 (cl-smtp::rfc2045-q-encode-string-to-stream
                   str s :external-format :latin-1 :columns 64))))
     (assert qstr)
     (assert (string-equal qstr (format nil "check of masked dot at last column 12345678901234567890123456789=~C~C..~C~C~C~CLAST LINE" #\Return #\Newline #\Return #\Newline #\Return #\Newline)))))
@@ -74,7 +74,7 @@ n !"
 (define-cl-smtp-test "rfc2045-q-encode-string-to-stream-7" ()
   (let* ((str (format nil "Example using non-ASCII characters:~A   -  74% : Erreur de protocole : la passerelle ne répond pas à la requête.~AYou won’t receive this!" #\Newline #\Newline))
          (qstr (with-output-to-string (s)
-                 (rfc2045-q-encode-string-to-stream
+                 (cl-smtp::rfc2045-q-encode-string-to-stream
                   str s :external-format :utf-8 :columns 74))))
     (assert qstr)
     (assert (string-equal qstr (format nil "Example using non-ASCII characters:~C~C   -  74% : Erreur de protocole : la passerelle ne r=C3=A9pond pas =C3=A0 la requ=C3=AAte=~C~C..~C~CYou won=E2=80=99t receive this!" #\Return #\Newline #\Return #\Newline #\Return #\Newline)))))
@@ -82,7 +82,7 @@ n !"
 (define-cl-smtp-test "rfc2045-q-encode-string-to-stream-8" ()
   (let* ((str "12345678901234567890123456789012345678901234567890123456789012345678901234.")
          (qstr (with-output-to-string (s)
-                 (rfc2045-q-encode-string-to-stream
+                 (cl-smtp::rfc2045-q-encode-string-to-stream
                   str s :external-format :utf-8 :columns 74))))
     (assert qstr)
     (assert (string-equal qstr (format nil"12345678901234567890123456789012345678901234567890123456789012345678901234=~C~C.." #\Return #\Newline)))))
@@ -91,7 +91,7 @@ n !"
   (let* ((str
           "123456789012345678901234567890123456789012345678901234567890123456789012345.")
          (qstr (with-output-to-string (s)
-                 (rfc2045-q-encode-string-to-stream
+                 (cl-smtp::rfc2045-q-encode-string-to-stream
                   str s :external-format :utf-8 :columns 74))))
     (assert qstr)
     (assert (string-equal qstr (format
@@ -101,16 +101,16 @@ n !"
 (define-cl-smtp-test "rfc2045-q-encode-string-to-stream-10" ()
   (let* ((str "لینک تایید | Verification link")
          (qstr (with-output-to-string (s)
-                 (rfc2045-q-encode-string-to-stream
+                 (cl-smtp::rfc2045-q-encode-string-to-stream
                   str s :external-format :utf-8 :columns 74))))
     (assert qstr)
     (assert (string-equal qstr "=D9=84=DB=8C=D9=86=DA=A9 =D8=AA=D8=A7=DB=8C=DB=8C=D8=AF | Verification link"))))
 
 (define-cl-smtp-test "string-has-non-ascii-1" ()
-  (assert (string-has-non-ascii "test Ü ende")))
+  (assert (cl-smtp::string-has-non-ascii "test Ü ende")))
 
 (define-cl-smtp-test "string-has-non-ascii-2" ()
-  (assert (not (string-has-non-ascii "test ende"))))
+  (assert (not (cl-smtp::string-has-non-ascii "test ende"))))
 
 (define-cl-smtp-test "rfc2045-q-encode-string-utf-8-1" ()
   (let* ((str "öüäÖÜÄß")
@@ -161,20 +161,20 @@ n !"
                          #\Return #\Newline))))
 
 (define-cl-smtp-test "escape-rfc822-quoted-string" ()
-  (assert (equal (escape-rfc822-quoted-string "test end") "test end"))
-  (assert (equal (escape-rfc822-quoted-string "test\\end") 
+  (assert (equal (cl-smtp::escape-rfc822-quoted-string "test end") "test end"))
+  (assert (equal (cl-smtp::escape-rfc822-quoted-string "test\\end")
                  "test\\\\end"))
-  (assert (equal (escape-rfc822-quoted-string "test\"end")
+  (assert (equal (cl-smtp::escape-rfc822-quoted-string "test\"end")
                  "test\\\"end"))
-  (assert (equal (escape-rfc822-quoted-string (format nil "test~%end")) 
+  (assert (equal (cl-smtp::escape-rfc822-quoted-string (format nil "test~%end"))
                  (format nil "test\\~%end")))
-  (assert (equal (escape-rfc822-quoted-string 
-                  (format nil "test~cend" #\Return)) 
+  (assert (equal (cl-smtp::escape-rfc822-quoted-string
+                  (format nil "test~cend" #\Return))
                  (format nil "test\\~cend" #\Return)))
-  (assert (equal (escape-rfc822-quoted-string "test/end") "test/end"))
-  (assert (equal (escape-rfc822-quoted-string "test end\\") 
+  (assert (equal (cl-smtp::escape-rfc822-quoted-string "test/end") "test/end"))
+  (assert (equal (cl-smtp::escape-rfc822-quoted-string "test end\\")
                  "test end\\\\"))
-  (assert (equal (escape-rfc822-quoted-string (format nil "~%test end\\")) 
+  (assert (equal (cl-smtp::escape-rfc822-quoted-string (format nil "~%test end\\"))
                  (format nil "\\~%test end\\\\"))))
 
 (define-cl-smtp-test "rfc2231-encode-string-utf-8" ()
@@ -211,11 +211,11 @@ n !"
     ))
 
 (define-cl-smtp-test "send-attachment-header-1" ()
-  (let* ((boundary (make-random-boundary))
+  (let* ((boundary (cl-smtp::make-random-boundary))
          (p (merge-pathnames "tests.lisp" (get-component-pathname)))
          (attachment (make-attachment p))
          (headerstr (with-output-to-string (s)
-                      (send-attachment-header s boundary attachment :utf-8)))
+                      (cl-smtp::send-attachment-header s boundary attachment :utf-8)))
          (returnnewline (format nil (format nil "~C~C" #\Return #\NewLine)))
          (tmpstr (format nil "--~A~AContent-type: text/plain;~% name*=UTF-8''tests.lisp;~% name=\"tests.lisp\"~AContent-Disposition: attachment; filename*=UTF-8''tests.lisp; filename=\"tests.lisp\"~AContent-Transfer-Encoding: base64~A~A" 
                          boundary returnnewline returnnewline returnnewline 
@@ -224,13 +224,13 @@ n !"
     ))
 
 (define-cl-smtp-test "send-attachment-header-2" ()
-  (let* ((boundary (make-random-boundary))
+  (let* ((boundary (cl-smtp::make-random-boundary))
          (p (merge-pathnames "tests.lisp" (get-component-pathname)))
          (attachment (make-attachment p
 				      :mime-type "text/plain"
 				      :name "foo\\bar"))
          (headerstr (with-output-to-string (s)
-                      (send-attachment-header s boundary attachment :utf-8)))
+                      (cl-smtp::send-attachment-header s boundary attachment :utf-8)))
          (returnnewline (format nil (format nil "~C~C" #\Return #\NewLine)))
          (tmpstr (format nil "--~A~AContent-type: text/plain;~% name*=UTF-8''foo%5Cbar;~% name=\"foo\\\\bar\"~AContent-Disposition: attachment; filename*=UTF-8''foo%5Cbar; filename=\"foo\\\\bar\"~AContent-Transfer-Encoding: base64~A~A" 
                          boundary returnnewline returnnewline returnnewline 
@@ -240,51 +240,53 @@ n !"
 
 
 (define-cl-smtp-test "mask-dot-1" ()
-  (assert (equal (mask-dot (format nil "~C~C.~C~C" #\Return #\NewLine
+  (assert (equal (cl-smtp::mask-dot (format nil "~C~C.~C~C" #\Return #\NewLine
                                    #\Return #\NewLine))
                  (format nil "~C~C..~C~C" #\Return #\NewLine
                          #\Return #\NewLine)))
-  (assert (equal (mask-dot (format nil "~C~C..~C~C" #\Return #\NewLine
+  (assert (equal (cl-smtp::mask-dot (format nil "~C~C..~C~C" #\Return #\NewLine
                                    #\Return #\NewLine))
                  (format nil "~C~C..~C~C" #\Return #\NewLine
                          #\Return #\NewLine)))
-  (assert (equal (mask-dot (format nil "~C~C~C~C" #\Return #\NewLine
+  (assert (equal (cl-smtp::mask-dot (format nil "~C~C~C~C" #\Return #\NewLine
                                    #\Return #\NewLine))
                  (format nil "~C~C~C~C" #\Return #\NewLine
                          #\Return #\NewLine)))
-  (assert (equal (mask-dot (format nil "~C.~C.~C.~C" #\Return #\NewLine
+  (assert (equal (cl-smtp::mask-dot (format nil "~C.~C.~C.~C" #\Return #\NewLine
                                    #\Return #\NewLine))
                  (format nil "~C.~C..~C.~C" #\Return #\NewLine
                          #\Return #\NewLine)))
-  (assert (equal (mask-dot (format nil "~C.~C" #\NewLine #\NewLine))
+  (assert (equal (cl-smtp::mask-dot (format nil "~C.~C" #\NewLine #\NewLine))
                  (format nil "~C..~C"  #\NewLine #\NewLine)))
-  (assert (equal (mask-dot (format nil ".~C.~C" #\NewLine #\NewLine))
+  (assert (equal (cl-smtp::mask-dot (format nil ".~C.~C" #\NewLine #\NewLine))
                  (format nil "..~C..~C"  #\NewLine #\NewLine))))
 
 (define-cl-smtp-test "substitute-return-newline" ()
-  (assert (equal (substitute-return-newline 
-                  (format nil "start~Aende" *return-newline*))
+  (assert (equal (cl-smtp::substitute-return-newline
+                  (format nil "start~Aende" cl-smtp::*return-newline*))
                  "start ende"))
-  (assert (equal (substitute-return-newline 
-                  (format nil "start~Aweiter~Aende" 
-                          *return-newline* *return-newline*))
+  (assert (equal (cl-smtp::substitute-return-newline
+                  (format nil "start~Aweiter~Aende"
+                          cl-smtp::*return-newline* cl-smtp::*return-newline*))
                  "start weiter ende"))
-  (assert (equal (substitute-return-newline 
-                  (format nil "~Astart~Aweiter~Aende~A" 
-                          *return-newline* *return-newline* *return-newline*
-                          *return-newline*))
+  (assert (equal (cl-smtp::substitute-return-newline
+                  (format nil "~Astart~Aweiter~Aende~A"
+                          cl-smtp::*return-newline* cl-smtp::*return-newline*
+                          cl-smtp::*return-newline* cl-smtp::*return-newline*))
                  " start weiter ende "))
-  (assert (equal (substitute-return-newline 
-                  (format nil "start~A~Aende" 
-                          *return-newline* *return-newline*))
+  (assert (equal (cl-smtp::substitute-return-newline
+                  (format nil "start~A~Aende"
+                          cl-smtp::*return-newline* cl-smtp::*return-newline*))
                  "start  ende"))
-  (assert (equal (substitute-return-newline 
-                  (format nil "start~A~A~Aende" 
-                          *return-newline* *return-newline* *return-newline*))
+  (assert (equal (cl-smtp::substitute-return-newline
+                  (format nil "start~A~A~Aende"
+                          cl-smtp::*return-newline* cl-smtp::*return-newline*
+                          cl-smtp::*return-newline*))
                  "start   ende"))
-  (assert (equal (substitute-return-newline 
-                  (format nil "start~A~%~A~Aende" 
-                          *return-newline* *return-newline* *return-newline*))
+  (assert (equal (cl-smtp::substitute-return-newline
+                  (format nil "start~A~%~A~Aende"
+                          cl-smtp::*return-newline* cl-smtp::*return-newline*
+                          cl-smtp::*return-newline*))
                  "start 
   ende"))
   )
@@ -303,7 +305,7 @@ n !"
 (define-cl-smtp-test "base64-encode-file" ()
   (let* ((p (merge-pathnames "tests.lisp" (get-component-pathname)))
          (base64str1 (with-output-to-string (s)
-                       (base64-encode-file p s)))
+                       (cl-smtp::base64-encode-file p s)))
          (buffer (file-to-usb8-buffer p))
          (base64str2 
           #-allegro

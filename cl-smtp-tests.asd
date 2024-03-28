@@ -24,4 +24,6 @@
   :version "20200724.1"
   :depends-on (:cl-smtp)
   :serial t
-  :components ((:file "tests")))
+  :components ((:file "tests"))
+  :perform (test-op (o s)
+                    (symbol-call 'cl-smtp-tests 'run-tests nil)))

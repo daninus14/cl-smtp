@@ -29,6 +29,7 @@
                :flexi-streams
                #-allegro :cl-base64 
                #-allegro :cl+ssl)
+  :in-order-to ((test-op (test-op cl-smtp-tests)))
   :serial t
   :components ((:file "package")
                (:file "attachments")
