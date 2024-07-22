@@ -19,23 +19,23 @@
 (in-package :cl-user)
 
 (defpackage :cl-smtp
-  (:use :cl :flexi-streams :trivial-gray-streams)
-  (:export "SEND-EMAIL"
-           "WITH-SMTP-MAIL"
-	   "*X-MAILER*"
-           "SMTP-ERROR"
-           "SMTP-PROTOCOL-ERROR"
-           "NO-SUPPORTED-AUTHENTICATION-METHOD"
-           "RCPT-FAILED"
-           "IGNORE-RECIPIENT"
-	   "ATTACHMENT"
-	   "MAKE-ATTACHMENT"
-	   "ATTACHMENT-NAME"
-	   "ATTACHMENT-DATA-PATHNAME"
-	   "ATTACHMENT-MIME-TYPE"
-           "RFC2045-Q-ENCODE-STRING"
-           "RFC2231-ENCODE-STRING"
-           "WRITE-RFC8822-MESSAGE"))
+  (:use #:cl)
+  (:export #:send-email
+           #:with-smtp-mail
+	   #:*x-mailer*
+	   #:smtp-error
+	   #:smtp-protocol-error
+           #:no-supported-authentication-method
+           #:rcpt-failed
+           #:ignore-recipient
+	   #:attachment
+	   #:make-attachment
+	   #:attachment-name
+	   #:attachment-data-pathname
+	   #:attachment-mime-type
+           #:rfc2045-q-encode-string
+           #:rfc2231-encode-string
+           #:write-rfc8822-message))
 
 (in-package :cl-smtp)
 

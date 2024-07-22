@@ -80,7 +80,7 @@
 (defun rfc2231-encode-string (string &key (external-format :utf-8))
   (with-output-to-string (s)
     (format s "~A''" (string-upcase (symbol-name external-format)))
-    (loop for n across (string-to-octets string
+    (loop for n across (flex:string-to-octets string
                                          :external-format external-format)
           for c = (code-char n)
           do (cond ((or (char<= #\0 c #\9)
