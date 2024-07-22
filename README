@@ -129,11 +129,11 @@ CL-SMTP automatically sets the Date header and the X-Mailer header.
 X-Mailer: cl-smtp ((lisp-implementation-type) (lisp-implementation-version))
 
 You can change the contents of the X-Mailer header by binding the
-CL-SMTP::*X-MAILER* variable to a string of your choice, e.g.:
-(setf cl-smtp::*x-mailer* "my x-mailer string").
+CL-SMTP:*X-MAILER* variable to a string of your choice, e.g.:
+(setf cl-smtp:*x-mailer* "my x-mailer string").
 
 You can also suppress the X-Mailer header entirely by binding
-CL-SMTP::*X-MAILER* to NIL.
+CL-SMTP:*X-MAILER* to NIL.
 
 If you find bugs or want to send patches for enhancements, by email to
 Jan Idzikowski <jidzikowski@common-lisp.net>
