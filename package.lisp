@@ -22,6 +22,7 @@
   (:use :cl :flexi-streams :trivial-gray-streams)
   (:export "SEND-EMAIL"
            "WITH-SMTP-MAIL"
+	   "*X-MAILER*"
            "SMTP-ERROR"
            "SMTP-PROTOCOL-ERROR"
            "NO-SUPPORTED-AUTHENTICATION-METHOD"
