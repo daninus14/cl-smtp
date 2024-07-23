@@ -365,7 +365,7 @@ header is generated at all.")
                          stream
                          :external-format flexi-external-format))))
       (ecase ssl
-        ((or t :starttls)
+        ((t :starttls)
 	 (read-greetings)
          (do-ehlo)
          (unless (find "STARTTLS" features :test #'equal)
