@@ -29,9 +29,11 @@
 		#:flexi-stream-stream
 		#:make-flexi-stream
 		#:flexi-stream-external-format)
+  #-allegro
   (:import-from #:cl-base64
 		#:usb8-array-to-base64-string
 		#:usb8-array-to-base64-stream)
+  #-allegro
   (:import-from #:cl+ssl
 		#:make-ssl-client-stream
 		#:stream-fd)
