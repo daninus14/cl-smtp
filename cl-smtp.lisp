@@ -237,7 +237,7 @@ header is generated at all.")
                       :port ,port
                       :authentication ,authentication 
                       :ssl ,ssl
-                      :local-hostname ,local-hostname
+                      :local-hostname (or ,local-hostname (usocket::get-host-name))
                       :external-format ,external-format))
 
 (defun send-email (host from to subject message 
