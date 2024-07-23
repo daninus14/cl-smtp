@@ -344,7 +344,7 @@ header is generated at all.")
 
   ;; When SSL or authentication requested, perform ESMTP EHLO
   (let ((features)
-        (flexi-external-format (flexi-stream-external-format stream)))
+        #-allegro (flexi-external-format (flexi-stream-external-format stream)))
     (labels
         ((read-greetings ()
 	   ;; Read the initial greeting from the SMTP server
