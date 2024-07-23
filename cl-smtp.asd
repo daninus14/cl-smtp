@@ -25,7 +25,6 @@
   :perform (load-op :after (op webpage)
                     (pushnew :cl-smtp cl:*features*))
   :depends-on (:usocket 
-               :trivial-gray-streams
                :flexi-streams
                #-allegro :cl-base64 
                #-allegro :cl+ssl)

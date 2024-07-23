@@ -20,6 +20,21 @@
 
 (defpackage :cl-smtp
   (:use #:cl)
+  (:import-from #:usocket
+		#:with-client-socket
+		#:get-host-name)
+  (:import-from #:flexi-streams
+		#:string-to-octets
+		#:make-external-format
+		#:flexi-stream-stream
+		#:make-flexi-stream
+		#:flexi-stream-external-format)
+  (:import-from #:cl-base64
+		#:usb8-array-to-base64-string
+		#:usb8-array-to-base64-stream)
+  (:import-from #:cl+ssl
+		#:make-ssl-client-stream
+		#:stream-fd)
   (:export #:send-email
            #:with-smtp-mail
 	   #:*x-mailer*

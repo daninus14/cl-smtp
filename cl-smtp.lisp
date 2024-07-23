@@ -57,13 +57,13 @@ header is generated at all.")
 
 (defun string-to-base64-string (str &key (external-format :utf-8)
                                 (columns 80))
-  (let ((exformat (flex:make-external-format external-format)))
-  #+allegro (excl:usb8-array-to-base64-string 
-             (flex:string-to-octets str :external-format exformat)
+  (let ((exformat (make-external-format external-format)))
+  #+allegro (excl:usb8-array-to-base64-string
+             (string-to-octets str :external-format exformat)
              :wrap-at-column (if (and (numberp columns) (= columns 0))
                                   nil columns))
-  #-allegro (cl-base64:usb8-array-to-base64-string 
-             (flex:string-to-octets str :external-format exformat)
+  #-allegro (usb8-array-to-base64-string
+             (string-to-octets str :external-format exformat)
              :columns columns)))
 
 (defun string-has-non-ascii (str)
@@ -77,7 +77,7 @@ header is generated at all.")
                              "?Q?"))
         (last-line-break 0)
         (len (length str))
-        (exformat (flex:make-external-format external-format)))
+        (exformat (make-external-format external-format)))
     (with-output-to-string (s)
       (when line-has-non-ascii
         (write-sequence estart s))
@@ -94,7 +94,7 @@ header is generated at all.")
              (setf last-line-break n))
            (cond
              (line-has-non-ascii
-              (loop for byte across (flex:string-to-octets 
+              (loop for byte across (string-to-octets
                                      (make-string 1 :initial-element c)
                                      :external-format exformat)
                  do (format s "~:@(=~2,'0X~)" byte)))
@@ -113,7 +113,7 @@ header is generated at all.")
 (defun rfc2045-q-encode-string-to-stream (str stream 
                                           &key (external-format :utf-8) 
                                           (columns 74))
-  (let ((exformat (flex:make-external-format external-format))
+  (let ((exformat (make-external-format external-format))
         (last-line-break 0)
         (len (length str)))
     (loop for c across str
@@ -140,7 +140,7 @@ header is generated at all.")
            ((or (< 127 (char-code c))
                 (> 33 (char-code c))
                 (char= c #\=))
-            (loop for byte across (flex:string-to-octets 
+            (loop for byte across (string-to-octets
                                      (make-string 1 :initial-element c)
                                      :external-format exformat)
                  do (format stream "~:@(=~2,'0X~)" byte)))
@@ -209,12 +209,12 @@ header is generated at all.")
     (append lines (list msgstr))))
 
 (defun do-with-smtp-mail (host envelope-sender to thunk &key port authentication ssl local-hostname (external-format :utf-8))
-  (usocket:with-client-socket (socket stream host port 
+  (with-client-socket (socket stream host port
                                       :element-type '(unsigned-byte 8))
-    (setf stream (flexi-streams:make-flexi-stream 
+    (setf stream (make-flexi-stream
                   stream
                   :external-format 
-                  (flexi-streams:make-external-format 
+                  (make-external-format
                    external-format :eol-style :lf)))
     (let ((stream (smtp-handshake stream
                                   :authentication authentication 
@@ -237,7 +237,7 @@ header is generated at all.")
                       :port ,port
                       :authentication ,authentication 
                       :ssl ,ssl
-                      :local-hostname (or ,local-hostname (usocket::get-host-name))
+                      :local-hostname (or ,local-hostname (get-host-name))
                       :external-format ,external-format))
 
 (defun send-email (host from to subject message 
@@ -259,13 +259,13 @@ header is generated at all.")
 	     :envelope-sender (or envelope-sender from)
              :external-format external-format
 	     :ssl ssl
-             :local-hostname (or local-hostname (usocket::get-host-name))))
+             :local-hostname (or local-hostname (get-host-name))))
 
 (defun send-smtp (host from to subject message
                   &key ssl (port (if (eq :tls ssl) 465 25)) cc bcc
 		  reply-to extra-headers html-message display-name
 		  authentication attachments buffer-size
-                  (local-hostname (usocket::get-host-name))
+                  (local-hostname (get-host-name))
 		  (envelope-sender from)
 		  (external-format :utf-8))
   (with-smtp-mail (stream host envelope-sender (append to cc bcc)
@@ -344,7 +344,7 @@ header is generated at all.")
 
   ;; When SSL or authentication requested, perform ESMTP EHLO
   (let ((features)
-        (flexi-external-format (flexi-streams:flexi-stream-external-format stream)))
+        (flexi-external-format (flexi-stream-external-format stream)))
     (labels
         ((read-greetings ()
 	   ;; Read the initial greeting from the SMTP server
@@ -356,12 +356,12 @@ header is generated at all.")
            (setf stream 
                  #+allegro (socket:make-ssl-client-stream stream)
                  #-allegro
-                 (let ((s (flexi-streams:flexi-stream-stream stream)))
-                   (cl+ssl:make-ssl-client-stream 
-                    (cl+ssl:stream-fd s)
+                 (let ((s (flexi-stream-stream stream)))
+                   (make-ssl-client-stream
+                    (stream-fd s)
                     :close-callback (lambda () (close s)))))
            #-allegro
-           (setf stream (flexi-streams:make-flexi-stream 
+           (setf stream (make-flexi-stream
                          stream
                          :external-format flexi-external-format))))
       (ecase ssl

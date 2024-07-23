@@ -80,7 +80,7 @@
 (defun rfc2231-encode-string (string &key (external-format :utf-8))
   (with-output-to-string (s)
     (format s "~A''" (string-upcase (symbol-name external-format)))
-    (loop for n across (flex:string-to-octets string
+    (loop for n across (string-to-octets string
                                          :external-format external-format)
           for c = (code-char n)
           do (cond ((or (char<= #\0 c #\9)
@@ -192,7 +192,7 @@
                             (if (> r 0) (subseq buffer 0 r) buffer) :wrap-at-column nil)
                            sock)
            #-allegro 
-           (cl-base64:usb8-array-to-base64-stream 
+           (usb8-array-to-base64-stream
             (if (> r 0) (subseq buffer 0 r) buffer) sock :columns 0)
            (incf n 3)
            (when (= (mod n columns) 0)
