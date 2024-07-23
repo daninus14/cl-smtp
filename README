@@ -19,25 +19,30 @@ To use cl-smtp:
 ------------------------------------------------
 
 (cl-smtp:send-email host from to subject message
-                    &key (port 25) cc bcc reply-to extra-headers html-message 
-                    authentication attachments (buffer-size 256) ssl)
+                    &key ssl (port (if (eq :tls ssl) 465 25)) cc bcc reply-to extra-headers
+                    html-message display-name authentication
+                    attachments (buffer-size 256) envelope-sender
+                    (external-format :utf-8) local-hostname)
 Send email.
 
 Returns nil or error with message
 
  arguments:
-  - host (String)                  : hostname or ip-address of the smtpserver
+  - host (String)                  : hostname or IP address of the SMTP server
   - from (String)                  : email address 
   - to (String or List of Strings) : email address 
   - subject (String)               : subject text
   - message (String)               : message body
  keywords:
+  - ssl (or t :starttls :tls)      : if t or :STARTTLS: use the STARTTLS functionality
+                                     if :TLS: use TLS directly
+  - port                           : TCP port number of the SMTP server
   - cc (String or List of Strings) : email adress carbon copy
   - bcc (String or List of Strings): email adress blind carbon copy
   - reply-to (String)              : email adress
-  - display-name (String)          : displayname of the sender
   - extra-headers (List)           : extra headers as alist
   - html-message (String)          : message body formatted with HTML tags
+  - display-name (String)          : displayname of the sender
   - authentication (List)          : list with 2 or elements
                                      ([:method] "username" "password")
                                      method is a keyword :plain or :login
@@ -46,11 +51,10 @@ Returns nil or error with message
   - attachments (Attachment Instance or String or Pathname: attachments to send
                 List of Attachment/String/Pathnames)
   - buffer-size (Number default 256): is no longer used, will remove in the future
-  - ssl (or t :starttls :tls)       : if t or :STARTTLS: use the STARTTLS functionality
-                                      if :TLS: use TLS directly
-  - external-format                 : symbol, default :utf-8
   - envelope-sender                 : email adress, 
                                       if not set then envelope-sender = from
+  - external-format                 : symbol, default :utf-8
+  - local-hostname (String)         : override hostname sent in SMTP HELO command
 
 ------------------------------------------------
 
