@@ -1,5 +1,9 @@
 
-CL-SMTP is a simple lisp smtp client. 
+CL-SMTP is a simple lisp smtp client.
+
+It should comply with RFC 5321 and RFC 7504.
+All non-conforming behaviour is considered a bug.
+
 It works in ACL, SBCL, CMUCL, OPENMCL, LISPWORKS, CLISP and ECL.
 
 new with support for send attachments, thanks Brian Sorg for the implementation
