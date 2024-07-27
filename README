@@ -12,9 +12,10 @@ used cl-base64 and usocket packages (cl-base64 isn't a requirement on ACL)
 
 See INSTALL for prerequisites and build details.
 
-To use cl-smtp:
+You can get cl-smtp: from Quicklisp, Ultralisp, Ocicl.
 
-(asdf:operate 'asdf:load-op 'cl-smtp)
+You can load cl-smtp either via `(ql:quickload 'cl-smtp)` or
+`(asdf:load-system 'cl-smtp)`.
 
 ------------------------------------------------
 
