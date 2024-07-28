@@ -1,5 +1,5 @@
 ;;; -*- mode: Lisp -*-
-       
+
 ;;; This file is part of CL-SMTP, the Lisp SMTP Client
 
 ;;; Copyright (C) 2004/2005/2006/2007 Jan Idzikowski
@@ -20,6 +20,7 @@
 
 (defpackage :cl-smtp
   (:use #:cl)
+  (:local-nicknames (:a :alexandria))
   (:import-from #:usocket
 		#:with-client-socket
 		#:get-host-name)
@@ -63,4 +64,3 @@
 (defmacro print-debug (str)
   `(when *debug*
       (print ,str)))
-

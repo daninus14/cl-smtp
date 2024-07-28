@@ -1,5 +1,5 @@
 ;;; -*- mode: Lisp -*-
-	
+
 ;;; This file is part of CL-SMTP, the Lisp SMTP Client
 
 ;;; Copyright (C) 2004/2005/2006/2007/2008/2009/2010 Jan Idzikowski
@@ -24,9 +24,11 @@
   :version "20191031.1"
   :perform (load-op :after (op webpage)
                     (pushnew :cl-smtp cl:*features*))
-  :depends-on (:usocket 
+  :depends-on (:alexandria
+               :usocket
                :flexi-streams
-               #-allegro :cl-base64 
+               :frugal-uuid/non-frugal
+               #-allegro :cl-base64
                #-allegro :cl+ssl)
   :in-order-to ((test-op (test-op cl-smtp-tests)))
   :serial t
@@ -34,4 +36,3 @@
                (:file "attachments")
                (:file "cl-smtp")
                (:file "mime-types")))
-
