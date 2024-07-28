@@ -1,7 +1,7 @@
 # CL-SMTP - A simple common lisp smtp client.
 
 ## Features
-* It should comply with [RFC 5321](https://datatracker.ietf.org/doc/html/rfc5321) and [RFC 7504](https://datatracker.ietf.org/doc/html/rfc7504). All non-conforming behaviour is considered a bug.
+* It should comply with [RFC 5321](https://datatracker.ietf.org/doc/html/rfc5321), [RFC 5322](https://datatracker.ietf.org/doc/html/rfc5322), and [RFC 7504](https://datatracker.ietf.org/doc/html/rfc7504). All non-conforming behaviour is considered a bug.
 * Works on *ACL*, *SBCL*, *CMUCL*, *OPENMCL*, *LISPWORKS*, *CLISP* and *ECL*.
 * support for send attachments, thanks Brian Sorg for the implementation
 * authentication support for PLAIN and LOGIN authentication method
@@ -90,16 +90,16 @@ arguments:
 keywords:
 * `external-format` (Symbol): default :utf-8
 
-### write-rfc5321-message
+### write-rfc5322-message
 
 ```common-lisp
-(write-rfc5321-message stream from to subject message
+(write-rfc5322-message stream from to subject message
                        &key cc reply-to extra-headers
                        html-message display-name
                        attachments buffer-size
                        external-format)
 ```
-Writes a [RFC 5321](https://datatracker.ietf.org/doc/html/rfc5321) compatible email to the stream.
+Writes a [RFC 5322](https://datatracker.ietf.org/doc/html/rfc5322) compatible email to the stream.
 
 For arguments see the `cl-smtp:send-email` documentation.
 

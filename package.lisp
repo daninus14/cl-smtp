@@ -52,7 +52,7 @@
 	   #:attachment-mime-type
            #:rfc2045-q-encode-string
            #:rfc2231-encode-string
-	   #:write-rfc5321-message
+	   #:write-rfc5322-message
            #:write-rfc8822-message ;; deprecated
 	   ))
 

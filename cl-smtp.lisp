@@ -274,7 +274,7 @@ header is generated at all.")
                           :ssl ssl
                           :local-hostname local-hostname
                           :external-format external-format)
-    (write-rfc5321-message stream from to subject message
+    (write-rfc5322-message stream from to subject message
                            :cc cc :reply-to reply-to 
                            :extra-headers extra-headers 
                            :html-message html-message
@@ -464,7 +464,7 @@ header is generated at all.")
 			:multipart-type "alternative"))
 	(t nil)))
 
-(defun write-rfc5321-message (stream from to subject message
+(defun write-rfc5322-message (stream from to subject message
                               &key cc reply-to extra-headers html-message 
                               display-name attachments buffer-size
                               (external-format :utf-8))
@@ -563,9 +563,9 @@ header is generated at all.")
                               &key cc reply-to extra-headers html-message
                               display-name attachments buffer-size
                               (external-format :utf-8))
-  "Deprecated function. Please change to write-rfc5321-message."
-  (warn "Please use `write-rfc5321-message` instead of `write-rfc8822-message`.")
-  (write-rfc5321-message stream from to subject message
+  "Deprecated function. Please change to write-rfc5322-message."
+  (warn "Please use `write-rfc5322-message` instead of `write-rfc8822-message`.")
+  (write-rfc5322-message stream from to subject message
 			 :cc cc :reply-to reply-to :extra-headers extra-headers
 			 :html-message  html-message :display-name display-name
 			 :attachments attachments :buffer-size buffer-size
