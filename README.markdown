@@ -90,16 +90,16 @@ arguments:
 keywords:
 * `external-format` (Symbol): default :utf-8
 
-### write-rfc8822-message
+### write-rfc5321-message
 
 ```common-lisp
-(write-rfc8822-message stream from to subject message
+(write-rfc5321-message stream from to subject message
                        &key cc reply-to extra-headers
                        html-message display-name
                        attachments buffer-size
                        external-format)
 ```
-Writes a RFC 8822 compatible email to the stream.
+Writes a [RFC 5321](https://datatracker.ietf.org/doc/html/rfc5321) compatible email to the stream.
 
 For arguments see the `cl-smtp:send-email` documentation.
 
