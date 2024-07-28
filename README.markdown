@@ -1,16 +1,23 @@
 # CL-SMTP - A simple common lisp smtp client.
 
 ## Features
-* It should comply with [RFC 5321](https://datatracker.ietf.org/doc/html/rfc5321), [RFC 5322](https://datatracker.ietf.org/doc/html/rfc5322), and [RFC 7504](https://datatracker.ietf.org/doc/html/rfc7504). All non-conforming behaviour is considered a bug.
-* Works on *ACL*, *SBCL*, *CMUCL*, *OPENMCL*, *LISPWORKS*, *CLISP* and *ECL*.
+* It should comply with
+  * [RFC 5321 - Simple Mail Transfer Protocol](https://datatracker.ietf.org/doc/html/rfc5321)
+    * [RFC 7504 - SMTP 521 and 556 Reply Codes](https://datatracker.ietf.org/doc/html/rfc7504)
+  * [RFC 5322 - Internet Message Format](https://datatracker.ietf.org/doc/html/rfc5322)
+    * [RFC 6854 - Update to Internet Message Format to Allow Group Syntax in the "From:" and "Sender:" Header Fields](https://datatracker.ietf.org/doc/html/rfc6854)
+  * [RFC 2045 - Multipurpose Internet Mail Extensions (MIME) Part One: Format of Internet Message Bodies](https://datatracker.ietf.org/doc/html/rfc2045)
+  * [RFC 2231 - MIME Parameter Value and Encoded Word Extensions: Character Sets, Languages, and Continuations](https://datatracker.ietf.org/doc/html/rfc2231)
+  * All non-conforming behaviour is considered a bug.
+* works on *ACL*, *CCL*, *SBCL*, *CMUCL*, *OPENMCL*, *LISPWORKS*, *CLISP* and *ECL*.
 * support for send attachments, thanks Brian Sorg for the implementation
 * authentication support for PLAIN and LOGIN authentication method
-* ssl support with cl+ssl package
-* uses *cl-base64* and *usocket* packages (*cl-base64* isn't a requirement on ACL)
+* ssl support with [cl+ssl](https://github.com/cl-plus-ssl/cl-plus-ssl) package
+* uses [cl-base64](http://git.kpe.io/?p=cl-base64.git) and [usocket](https://github.com/usocket/usocket) packages (*cl-base64* isn't a requirement on ACL)
 * automatically added headers: *date*, *x-mailer* (can be disabled)
 * encode [RFC 2231](https://datatracker.ietf.org/doc/html/rfc2231) string
 
-See INSTALL for prerequisites and build details.
+## Get Started
 
 You can get *cl-smtp* from *Quicklisp*, *Ultralisp*, *Ocicl*.
 
@@ -59,8 +66,9 @@ arguments:
                attachments to send, List of Attachment/String/Pathnames)
 * `envelope-sender` (String): email adress,
                               if not set then envelope-sender = from
-* `external-format` : symbol, default :utf-8
+* `external-format` (Symbol): default :utf-8
 * `local-hostname` (String) : override hostname sent in SMTP HELO command
+* `message-id` (String): set custom message-id, by default a uuidv7 plus sender domain are used.
 
 ### rfc2045-q-encode-string
 
@@ -81,9 +89,9 @@ keywords:
 ```common-lisp
 (rfc2231-encode-string str &key (external-format :utf8))
 ```
-Decodes a string to an rfc2231 encode string.
+Decodes a string to an [RFC 2231](https://datatracker.ietf.org/doc/html/rfc2231) encode string.
 
-Returns  rfc2231 encode string
+Returns RFC 2231 encode string
 
 arguments:
 * `str` (String): the string to encode
