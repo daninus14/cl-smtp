@@ -55,6 +55,7 @@
            #:rfc2231-encode-string
 	   #:write-rfc5322-message
            #:write-rfc8822-message ;; deprecated
+	   #:*debug*
 	   ))
 
 (in-package :cl-smtp)

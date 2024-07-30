@@ -158,7 +158,7 @@ binding `cl-smtp:*x-mailer*` variable to `nil`
 ## Debugging
 For debug output set the parameter \*debug\* to `t` (default `nil`)
 ```common-lisp
-(setf cl-smtp::*debug* t)
+(setf cl-smtp:*debug* t)
 ```
 
 ## Contact
