@@ -55,8 +55,12 @@
            #:rfc2231-encode-string
 	   #:write-rfc5322-message
            #:write-rfc8822-message ;; deprecated
-	   #:*debug*
-	   ))
+           #:*debug*
+           ;; restart-case case-names
+           #:send-without-message-id
+           #:use-local-hostname
+           #:use-custom-domain-part
+           #:use-custom-message-id))
 
 (in-package :cl-smtp)
 

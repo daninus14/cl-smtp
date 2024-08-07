@@ -260,32 +260,74 @@ header is generated at all.")
 
 (a:define-constant +message-id-header-key+ "Message-ID" :test #'string=)
 
-(defun generate-message-id-header (header-value)
-  (list +message-id-header-key+ header-value))
+(defun generate-message-id-uuidv7@domain (sender-address)
+  (restart-case
+      (generate-email-message-id (extract-domain-from-email-address sender-address))
+    (send-without-message-id ()
+      :report "send email without message-id header"
+      nil)
+    (use-local-hostname ()
+      :report (lambda (stream)
+                (format stream
+                        "use local-host-name (\"~a\") as domain part after the '@' in in the message-id header"
+                        (usocket::get-host-name)))
+      (generate-email-message-id (usocket::get-host-name)))
+    (use-custom-domain-part (domain)
+      :report "provide a string for the part after the '@' in in the message-id header"
+      :interactive (lambda ()
+                     (write-sequence "provide a string for the part after the '@' in in the message-id header: "
+                                     *standard-output*)
+                     (multiple-value-list (eval (read))))
+      (generate-email-message-id domain))
+    (use-custom-message-id (message-id)
+      :report "provide a string that will be used as message-id header"
+      :interactive (lambda ()
+                     (write-sequence "provide a string that will be used as message-id header: "
+                                     *standard-output*)
+                     (multiple-value-list (eval (read))))
+      message-id)))
+
+(defparameter *message-id-generator* :uuidv7@domain)
+
+(defgeneric generate-message-id-header (generator sender-address))
+
+(defmethod generate-message-id-header ((generator string) sender-address)
+  (declare (ignore sender-address))
+  generator)
+
+(defmethod generate-message-id-header ((generator null) sender-address)
+  (declare (ignore sender-address))
+  nil)
+
+(defmethod generate-message-id-header ((generator (eql :uuidv7@domain)) sender-address)
+  (generate-message-id-uuidv7@domain sender-address))
+
+(defmethod generate-message-id-header ((generator (eql :uuidv7)) sender-address)
+  (generate-message-id-header :uuidv7@domain sender-address))
 
 (defun send-email (host from to subject message
 		   &key ssl (port (if (eq :tls ssl) 465 25)) cc bcc reply-to extra-headers
 		     html-message display-name authentication
 		     attachments (buffer-size 256) envelope-sender
                      (external-format :utf-8) local-hostname
-                     (message-id
-                      (generate-email-message-id (extract-domain-from-email-address from))))
-  (send-smtp host from (check-arg to "to") subject (mask-dot message)
-	     :port port :cc (check-arg cc "cc") :bcc (check-arg bcc "bcc")
-	     :reply-to reply-to
-	     :extra-headers extra-headers
-             :message-id   message-id
-	     :html-message html-message
-	     :display-name display-name
-	     :authentication authentication
-	     :attachments (check-arg attachments "attachments")
-	     :buffer-size (if (numberp buffer-size)
-			      buffer-size
-			      256)
-	     :envelope-sender (or envelope-sender from)
-             :external-format external-format
-	     :ssl ssl
-             :local-hostname (or local-hostname (get-host-name))))
+                     (message-id *message-id-generator*))
+  (let ((message-id (generate-message-id-header message-id from)))
+    (send-smtp host from (check-arg to "to") subject (mask-dot message)
+	       :port port :cc (check-arg cc "cc") :bcc (check-arg bcc "bcc")
+	       :reply-to reply-to
+	       :extra-headers extra-headers
+               :message-id   message-id
+	       :html-message html-message
+	       :display-name display-name
+	       :authentication authentication
+	       :attachments (check-arg attachments "attachments")
+	       :buffer-size (if (numberp buffer-size)
+			        buffer-size
+			        256)
+	       :envelope-sender (or envelope-sender from)
+               :external-format external-format
+	       :ssl ssl
+               :local-hostname (or local-hostname (get-host-name)))))
 
 (defun send-smtp (host from to subject message
                   &key ssl (port (if (eq :tls ssl) 465 25)) cc bcc
